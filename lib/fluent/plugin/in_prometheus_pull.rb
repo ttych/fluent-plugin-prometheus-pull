@@ -83,12 +83,15 @@ module Fluent
 
       def pull
         urls.each do |url|
-          time = Fluent::EventTime.now
+          pull_time = Fluent::EventTime.now
           raw_metrics = fetch(url)
-          parser.parse(raw_metrics) do |_time, record|
-            router.emit(tag, time, record)
-          rescue StandardError => e
-            error("error #{e}, while emitting #{record}")
+          parser.parse(raw_metrics) do |time, record|
+            begin
+              time ||= pull_time
+              router.emit(tag, time, record)
+            rescue StandardError => e
+              error("error #{e}, while emitting #{record}")
+            end
           end
         end
       end

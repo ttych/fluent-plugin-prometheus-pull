@@ -68,7 +68,7 @@ module Fluent
             end
             yield time, record
           else
-            error("skip unsupported prometheus entry: #{record}")
+            error("skip unsupported prometheus entry: #{entry}")
           end
         end
       end
