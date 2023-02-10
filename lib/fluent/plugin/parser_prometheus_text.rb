@@ -27,7 +27,7 @@ module Fluent
       TYPE_RE = /^#\sTYPE\s(?<metric_name>\w+)\s(?<metric_type>\w+)/.freeze
       METRIC_RE = /^(?<metric_name>\w+)
                     (:?\{(?<labels>.*?)\})?\s*
-                    (?<metric_value>[-\dEe.]+|Nan|[+-]Inf)
+                    (?<metric_value>[-\dEe.]+|NaN|[+-]Inf)
                     (?:\s(?<timestamp>-?\d+))?$/x.freeze
       LABEL_RE = /(?:\b(\w+)="(.*?)(?<!\\)"(?:,?|\b))/.freeze
 

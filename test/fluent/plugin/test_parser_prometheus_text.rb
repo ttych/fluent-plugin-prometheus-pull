@@ -141,6 +141,29 @@ class PrometheusTextParserTest < Test::Unit::TestCase
       end
       assert_equal 1, record_count
     end
+
+    test 'parse NaN value' do
+      prometheus_text = <<~METRICS_END
+        product_used_bytes{instance="",name="success",id="def-567",destination="End",} NaN
+      METRICS_END
+
+      expected_metric = [nil,
+                         { 'metric_name' => 'product_used_bytes',
+                           'metric_value' => Float::NAN,
+                           'instance' => '',
+                           'name' => 'success',
+                           'id' => 'def-567',
+                           'destination' => 'End' }]
+
+      driver = create_driver
+      record_count = 0
+      driver.instance.parse(prometheus_text) do |time, record|
+        assert_equal(expected_metric[0], time ? time.to_time : time)
+        assert_equal(expected_metric[1], record)
+        record_count += 1
+      end
+      assert_equal 1, record_count
+    end
   end
 
   private
