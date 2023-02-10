@@ -78,7 +78,7 @@ module Fluent
       def start
         super
 
-        timer_execute(:in_prometheus_pull, @interval, &method(:pull))
+        timer_execute(:in_prometheus_pull_timer, @interval, &method(:pull))
       end
 
       def pull
