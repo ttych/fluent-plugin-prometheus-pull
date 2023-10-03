@@ -1,40 +1,72 @@
 # fluent-plugin-prometheus-pull
 
-[Fluentd](https://fluentd.org/) input plugin to do something.
+[Fluentd](https://fluentd.org/) input plugin to pull prometheus http endpoint.
 
-TODO: write description for you plugin.
+
+## plugins
+
+### input - prometheus_pull
+
+Pull http prometheus metric endpoint.
+
+with options:
+* ...
+* ...
+
+Example:
+
+```
+<source>
+  @type prometheus_pull
+  urls http://app/metrics,http://app2/metrics
+  interval 300s
+
+  tag metric
+
+  <parse>
+    @type prometheus_text
+    label_prefix  tags_
+    add_type false
+  </parse>
+</source>
+```
+
+### parser - prometheus_text
+
+Take a "text" (string) of prometheus content, fetched by any mechanism you want,
+then it parses it, transforming each line in 1 event.
+
+with options:
+* ...
+* ...
+
+Example:
+
+```
+<parse>
+  @type prometheus_text
+  label_prefix tags_
+  add_type false
+</parse>
+```
 
 ## Installation
 
-### RubyGems
+Manual install, by executing:
 
-```
-$ gem install fluent-plugin-prometheus-pull
-```
+    $ gem install fluent-plugin-prometheus-pull
 
-### Bundler
+Add to Gemfile with:
 
-Add following line to your Gemfile:
+    $ bundle add fluent-plugin-prometheus-pull
 
-```ruby
-gem "fluent-plugin-prometheus-pull"
-```
 
-And then execute:
+## Compatibility
 
-```
-$ bundle
-```
+plugin will work with:
+- ruby >= 2.7.7
+- td-agent >= 4.0.0
 
-## Configuration
-
-You can generate configuration template:
-
-```
-$ fluent-plugin-config-format input prometheus-pull
-```
-
-You can copy and paste generated documents here.
 
 ## Copyright
 
