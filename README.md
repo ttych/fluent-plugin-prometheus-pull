@@ -10,8 +10,12 @@
 Pull http prometheus metric endpoint.
 
 with options:
-* ...
-* ...
+
+| options       | default | usage                                            |
+|---------------|---------|--------------------------------------------------|
+|               |         |                                                  |
+| event_url_key | nil     | add in generated event, key to store fetched url |
+|               |         |                                                  |
 
 Example:
 

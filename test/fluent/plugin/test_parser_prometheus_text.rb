@@ -100,7 +100,7 @@ class PrometheusTextParserTest < Test::Unit::TestCase
     end
 
     test 'parse metric with labels and label_prefix' do
-      prometheus_text = <<~'METRICS_END'
+      prometheus_text = <<~METRICS_END
         any_metric{criticity="high",availability="high"} 1.234
       METRICS_END
       expected_metric = [nil,

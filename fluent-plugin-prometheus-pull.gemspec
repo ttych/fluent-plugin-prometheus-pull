@@ -34,6 +34,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 1.44', '>= 1.44.1'
   spec.add_development_dependency 'rubocop-rake', '~> 0.6.0'
   spec.add_development_dependency 'test-unit', '~> 3.5.3'
+  spec.add_development_dependency 'mocha', '~> 2.4', '>= 2.4.5'
+
 
   spec.add_runtime_dependency 'fluentd', ['>= 0.14.10', '< 2']
 end

@@ -63,12 +63,18 @@ module Fluent
       desc 'CA file path'
       config_param :ca_file, :string, default: nil
 
+      desc 'Event URL key'
+      config_param :event_url_key, :string, default: nil
+
       def configure(conf)
         compat_parameters_convert(conf, :parser)
 
         parser_config = conf.elements('parse').first
         # raise Fluent::ConfigError, '<parse> section is required.' unless parser_config
-        parser_config ||= Fluent::Config::Element.new('parse', '', [], { '@type' => 'prometheus_text' })
+        unless parser_config
+          parser_config ||= Fluent::Config::Element.new('parse', '', { '@type' => 'prometheus_text' }, [])
+          conf.elements.append(parser_config)
+        end
 
         super
 
@@ -88,6 +94,7 @@ module Fluent
           parser.parse(raw_metrics) do |time, record|
             begin
               time ||= pull_time
+              record[event_url_key] = url if event_url_key
               router.emit(tag, time, record)
             rescue StandardError => e
               error("error #{e}, while emitting #{record}")
@@ -127,8 +134,8 @@ module Fluent
       def fetch(url, redirect_limit = 5)
         raise 'Max number of redirects reached' if redirect_limit <= 0
 
-        uri = URI.parse(url)
-        http(uri) do |http, uri|
+        fetch_uri = URI.parse(url)
+        http(fetch_uri) do |http, uri|
           req = request(uri)
           response = http.request(req)
 
