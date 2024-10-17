@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name    = 'fluent-plugin-prometheus-pull'
-  spec.version = '0.2.1'
+  spec.version = '0.3.0'
   spec.authors = ['Thomas Tych']
   spec.email   = ['thomas.tych@gmail.com']
 
