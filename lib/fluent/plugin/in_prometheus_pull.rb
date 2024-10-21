@@ -20,12 +20,16 @@ require 'uri'
 
 require 'fluent/plugin/input'
 
+require_relative 'prometheus_pull/labeled_url'
+
 module Fluent
   module Plugin
     # input / source
     # pull prometheus http endpoint
     class PrometheusPullInput < Fluent::Plugin::Input
       Fluent::Plugin.register_input('prometheus_pull', self)
+
+      attr_reader :labeled_urls
 
       helpers :timer, :parser, :compat_parameters
 
@@ -65,6 +69,8 @@ module Fluent
 
       desc 'Event URL key'
       config_param :event_url_key, :string, default: nil
+      desc 'Event URL label key'
+      config_param :event_url_label_key, :string, default: nil
 
       def configure(conf)
         compat_parameters_convert(conf, :parser)
@@ -78,6 +84,8 @@ module Fluent
 
         super
 
+        @labeled_urls = urls.map { |url| parse_url(url) }
+
         @parser = parser_create(conf: parser_config)
       end
 
@@ -88,13 +96,15 @@ module Fluent
       end
 
       def pull
-        urls.each do |url|
+        labeled_urls.each do |url|
           pull_time = Fluent::EventTime.now
-          raw_metrics = fetch(url)
+          raw_metrics = fetch(url.url)
           parser.parse(raw_metrics) do |time, record|
             begin
               time ||= pull_time
-              record[event_url_key] = url if event_url_key
+              record[event_url_key] = url.url if event_url_key
+              record[event_url_label_key] = url.label if event_url_label_key && url.label
+
               router.emit(tag, time, record)
             rescue StandardError => e
               error("error #{e}, while emitting #{record}")
@@ -156,6 +166,10 @@ module Fluent
         return unless log
 
         log.error(message)
+      end
+
+      def parse_url(labeled_url)
+        PrometheusPull::LabeledUrl.parse_labeled_url(labeled_url)
       end
     end
   end

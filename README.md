@@ -11,11 +11,11 @@ Pull http prometheus metric endpoint.
 
 with options:
 
-| options       | default | usage                                            |
-|---------------|---------|--------------------------------------------------|
-|               |         |                                                  |
-| event_url_key | nil     | add in generated event, key to store fetched url |
-|               |         |                                                  |
+| options             | default | usage                                                |
+|---------------------|---------|------------------------------------------------------|
+|                     |         |                                                      |
+| event_url_key       | nil     | define the key that will store the fetched url       |
+| event_url_label_key | nil     | define the key that will store the fetched url label |
 
 Example:
 
@@ -74,6 +74,6 @@ plugin will work with:
 
 ## Copyright
 
-* Copyright(c) 2023- Thomas Tych
+* Copyright(c) 2023-2024 Thomas Tych
 * License
   * Apache License, Version 2.0
